@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Send Message to Discord Webhook</title>
+</head>
+<body>
+
+<h2>Send Message to Discord Webhook</h2>
+<p>i made this w/ chatgpt.</p>
+<p>made by tfdev (wes) & chatgpt</p>
+
+<div>
+    <label for="webhookUrl">Discord Webhook URL:</label><br>
+    <input type="text" id="webhookUrl" name="webhookUrl" size="50"><br><br>
+    
+    <label for="webhookName">Webhook Name:</label><br>
+    <input type="text" id="webhookName" name="webhookName" size="50"><br><br>
+    
+    <label for="message">Message:</label><br>
+    <textarea id="message" name="message" rows="4" cols="50"></textarea><br><br>
+    
+    <label for="avatar">Choose Avatar (optional):</label><br>
+    <input type="file" id="avatar" name="avatar"><br><br>
+    
+    <button onclick="sendMessage()">Send Message</button>
+</div>
+
+<script>
+function sendMessage() {
+    var webhookUrl = document.getElementById('webhookUrl').value.trim();
+    var webhookName = document.getElementById('webhookName').value.trim();
+    var message = document.getElementById('message').value.trim();
+    var avatarFile = document.getElementById('avatar').files[0];
+    
+    if (!webhookUrl || !webhookName || !message) {
+        alert('Please enter Discord Webhook URL, Webhook Name, and a message.');
+        return;
+    }
+    
+    var request = new XMLHttpRequest();
+    request.open('POST', webhookUrl);
+    var formData = new FormData();
+    
+    formData.append('username', webhookName);
+    formData.append('content', message);
+    
+    if (avatarFile) {
+        formData.append('avatar', avatarFile);
+    }
+    
+    request.send(formData);
+    
+    request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+            alert('Message sent to Discord!');
+        } else {
+            alert('Failed to send message to Discord. Check your webhook URL and try again.');
+        }
+    };
+    
+    request.onerror = function() {
+        alert('Failed to send message to Discord. Check your network connection and try again.');
+    };
+}
+</script>
+
+</body>
+</html>
